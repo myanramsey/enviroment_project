@@ -1,0 +1,22 @@
+# Backend (Flask)
+venv/
+*.pyc
+*.pyo
+__pycache__/
+.env
+
+# Frontend (React)
+frontend/node_modules/
+frontend/build/
+frontend/.env
+*./node_modules
+
+# Logs and misc
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
