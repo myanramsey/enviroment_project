@@ -21,12 +21,12 @@ except Exception as e:
 db = client['test_swe_database']
 users_collection = db['users']
 # create one user for test :)
-user = {
-    "email": "example_user",
-    "password": "123"  # Always hash passwords before storing
-}
-users_collection.insert_one(user)
-print(db.list_collection_names())
+# user = {
+#     "email": "example_user",
+#     "password": "123"  # Always hash passwords before storing
+# }
+# users_collection.insert_one(user)
+# print(db.list_collection_names())
 
 
 @app.route('/api/register', methods=['POST'])

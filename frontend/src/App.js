@@ -13,7 +13,9 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      if (!responfise.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const data = await response.json();
       setMessage(data.message || data.error);
     } catch (error) {
@@ -24,29 +26,37 @@ function App() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:5000/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-    setMessage(data.message || data.error);
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setMessage(data.message || data.error);
+    } catch (error) {
+      console.error('Login Error:', error);
+      setMessage(error.message);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:5000/api/testdb');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const data = await response.json();
       console.log('DB Connection Test:', data);
     } catch (error) {
       console.error('Connection test failed:', error);
+      setMessage("Failed to connect to the database.");
     }
   };
-  
-  // Add to your JSX:
-  <button onClick={handleSubmit}>Test DB Connection</button>
-  
 
   return (
     <div>
@@ -67,6 +77,7 @@ function App() {
         <button onClick={handleRegister}>Register</button>
         <button onClick={handleLogin}>Login</button>
       </form>
+      <button onClick={handleSubmit}>Test DB Connection</button>
       {message && <p>{message}</p>}
     </div>
   );
