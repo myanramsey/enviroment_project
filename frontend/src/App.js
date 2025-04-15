@@ -131,15 +131,220 @@ function LoginPage() {
   );
 }
 
+
+const quiz = [
+  {
+    category: "Recycling Habits",
+    maxPoints: 9,
+    questions: [
+      {
+        question: "How often do you recycle paper, plastic, and glass products?",
+        answers: [
+          { text: "Never", points: 0 },
+          { text: "Sometimes", points: 1 },
+          { text: "Often", points: 2 },
+          { text: "Always", points: 3 }
+        ]
+      },
+      {
+        question: "When buying products, do you consider if the packaging is recyclable or minimal?",
+        answers: [
+          { text: "Never", points: 0 },
+          { text: "Rarely", points: 1 },
+          { text: "Sometimes", points: 2 },
+          { text: "Yes, always", points: 3 }
+        ]
+      },
+      {
+        question: "What do you do with used batteries or electronics?",
+        answers: [
+          { text: "Throw them in the trash", points: 0 },
+          { text: "Store them somewhere but not sure what to do", points: 1 },
+          { text: "Occasionally take them to recycling centers", points: 2 },
+          { text: "Always dispose of them at designated drop-off points", points: 3 }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Water Conservation",
+    maxPoints: 9,
+    questions: [
+      {
+        question: "How long are your typical showers?",
+        answers: [
+          { text: "over 40 minutes", points: 0 },
+          { text: "30-40 minutes", points: 1 },
+          { text: "20-30 minutes", points: 2 },
+          { text: "under 15 minutes", points: 3 }
+        ]
+      },
+      {
+        question: "Do you turn off the tap while brushing your teeth?",
+        answers: [
+          { text: "Never", points: 0 },
+          { text: "Rarely", points: 1 },
+          { text: "Most of the time", points: 2 },
+          { text: "Always", points: 3 }
+        ]
+      },
+      {
+        question: "How often do you tend to accidentally leave your faucet/sink running?",
+        answers: [
+          { text: "Always", points: 0 },
+          { text: "Often", points: 1 },
+          { text: "Sometimes", points: 2 },
+          { text: "Never", points: 3 }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Energy Conservation",
+    maxPoints: 9,
+    questions: [
+      {
+        question: "How often do you turn off lights and electronics when not in use?",
+        answers: [
+          { text: "Never", points: 0 },
+          { text: "Occasionally", points: 1 },
+          { text: "Most of the time", points: 2 },
+          { text: "Always", points: 3 }
+        ]
+      },
+      {
+        question: "What’s your usual habit regarding lights when leaving a room?",
+        answers: [
+          { text: "Leave them on", points: 0 },
+          { text: "Only turn off if I’ll be gone for a while", points: 1 },
+          { text: "Usually turn them off", points: 2 },
+          { text: "Always turn them off right away", points: 3 }
+        ]
+      },
+      {
+        question: "Do you unplug devices or use power strips to reduce phantom energy use?",
+        answers: [
+          { text: "Never", points: 0 },
+          { text: "Rarely", points: 1 },
+          { text: "Sometimes", points: 2 },
+          { text: "Yes, regularly", points: 3 }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Waste Reduction",
+    maxPoints: 9,
+    questions: [
+      {
+        question: "When buying products, how much do you consider packaging waste?",
+        answers: [
+          { text: "I never think about it", points: 0 },
+          { text: "Rarely, unless it's a lot of plastic", points: 1 },
+          { text: "I try to choose minimal packaging", points: 2 },
+          { text: "I prioritize products with recyclable or compostable packaging", points: 3 }
+        ]
+      },
+      {
+        question: "How often do you buy single-use items (e.g., plastic cutlery, paper towels, water bottles)?",
+        answers: [
+          { text: "Very often", points: 0 },
+          { text: "Occasionally", points: 1 },
+          { text: "Rarely", points: 2 },
+          { text: "I avoid single-use items and use reusable alternatives", points: 3 }
+        ]
+      },
+      {
+        question: "When decluttering, what do you do with items you no longer need?",
+        answers: [
+          { text: "Throw them out", points: 0 },
+          { text: "Only donate or sell if it’s easy", points: 1 },
+          { text: "Donate or sell when possible", points: 2 },
+          { text: "Always try to donate, sell, or repurpose items", points: 3 }
+        ]
+      }
+    ]
+  }
+];
+
 function QuizPage() {
+  const [answers, setAnswers] = useState({});
+  const [showResults, setShowResults] = useState(false);
+
+  const handleChange = (catIdx, qIdx, ansIdx) => {
+    setAnswers({
+      ...answers,
+      [`${catIdx}-${qIdx}`]: ansIdx
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowResults(true);
+  };
+
+  const getCategoryScores = () => {
+    return quiz.map((cat, catIdx) => {
+      let score = 0;
+      cat.questions.forEach((q, qIdx) => {
+        const ansIdx = answers[`${catIdx}-${qIdx}`];
+        if (ansIdx !== undefined) {
+          score += q.answers[ansIdx].points;
+        }
+      });
+      return { category: cat.category, score, max: cat.maxPoints };
+    });
+  };
+
+  
+
   return (
     <div className="quiz-container">
-      <h1>Welcome to the Quiz</h1>
-      <p>Start answering the questions below:</p>
-      {/* Add your quiz content here */}
+      <h1>Eco-Friendly Habits Quiz</h1>
+      <form onSubmit={handleSubmit}>
+        {quiz.map((cat, catIdx) => (
+          <div key={cat.category} className="category-block">
+            <h2>{cat.category}</h2>
+            {cat.questions.map((q, qIdx) => (
+              <div key={q.question} className="question-block">
+                <div className="question">{q.question}</div>
+                <div className="answers">
+                  {q.answers.map((ans, ansIdx) => (
+                    <label key={ans.text}>
+                      <input
+                        type="radio"
+                        name={`cat${catIdx}-q${qIdx}`}
+                        value={ansIdx}
+                        checked={answers[`${catIdx}-${qIdx}`] === ansIdx}
+                        onChange={() => handleChange(catIdx, qIdx, ansIdx)}
+                        disabled={showResults}
+                      />
+                      {ans.text} ({ans.points} pts)
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+        {!showResults && <button type="submit">Submit Quiz</button>}
+      </form>
+      {showResults && (
+        <div className="results">
+          <h2>Your Results</h2>
+          <ul>
+            {getCategoryScores().map((cat) => (
+              <li key={cat.category}>
+                <strong>{cat.category}:</strong> {cat.score} / {cat.max}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
+
 
 function App() {
   return (
