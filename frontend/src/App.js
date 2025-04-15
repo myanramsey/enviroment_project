@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useNavigation } from 'react-router-dom';
 import './App.css'; // Make sure to create this CSS file
 
 
-function App() {
+function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -39,6 +41,9 @@ function App() {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
+    if(data.message === "Login successful"){
+      navigate('/quiz');
+    }
     setMessage(data.message || data.error);
     } catch (error) {
       console.error('Login Error:', error);
@@ -123,6 +128,27 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+function QuizPage() {
+  return (
+    <div className="quiz-container">
+      <h1>Welcome to the Quiz</h1>
+      <p>Start answering the questions below:</p>
+      {/* Add your quiz content here */}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/quiz" element={<QuizPage />} />
+      </Routes>
+    </Router>
   );
 }
 
