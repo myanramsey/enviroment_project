@@ -325,7 +325,7 @@ function QuizPage() {
 
   return (
     <div className="quiz-container">
-      <h1>Eco-Friendly Habits Quiz</h1>
+      <h1 className = "title">Eco-Friendly Habits Quiz</h1>
       <form onSubmit={handleSubmit}>
         {quiz.map((cat, catIdx) => (
           <div key={cat.category} className="category-block">
