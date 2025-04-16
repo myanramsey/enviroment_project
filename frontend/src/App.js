@@ -42,6 +42,7 @@ function LoginPage() {
     }
     const data = await response.json();
     if(data.message === "Login successful"){
+      localStorage.setItem('userEmail', email); // Save email to localStorage
       navigate('/quiz');
     }
     setMessage(data.message || data.error);
@@ -268,6 +269,29 @@ const quiz = [
 ];
 
 function QuizPage() {
+
+  const handleSaveResults = async () => {
+    const email = localStorage.getItem('userEmail');
+    const results = getCategoryScores();  // Your function to get scores
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/save_results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, results }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Results saved:', data.message);
+      } else {
+        console.error('Error saving results:', data.error);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+  };
+  
   const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
 
@@ -281,6 +305,7 @@ function QuizPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setShowResults(true);
+    handleSaveResults();
   };
 
   const getCategoryScores = () => {

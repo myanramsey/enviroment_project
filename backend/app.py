@@ -34,6 +34,7 @@ def register():
     data = request.json
     email = data.get('email')
     password = data.get('password')  # Store plaintext password
+    results = {}
 
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
@@ -73,6 +74,23 @@ def test_db():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/save_results', methods=['POST'])
+def save_results():
+    data = request.json
+    email = data.get('email')  # Identify user by email or user ID
+    results = data.get('results')  # The quiz results object
+
+    if not email or not results:
+        return jsonify({"error": "Email and results are required"}), 400
+
+    # Save the results in a new collection or embed in user document
+    users_collection.update_one(
+        {"email": email},
+        {"$set": {"quiz_results": results}},
+        upsert=False
+    )
+    return jsonify({"message": "Results saved successfully"}), 200
 
 
 if __name__ == '__main__':
