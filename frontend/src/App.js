@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useNavigation } from 'react-router-dom';
 import './App.css'; // Make sure to create this CSS file
+import HistoryPage from './HistoryPage';
 
 
 function LoginPage() {
@@ -16,6 +17,7 @@ function LoginPage() {
       'http://localhost:5000/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
     if (!response.ok){
@@ -35,6 +37,7 @@ function LoginPage() {
       const response = await fetch('http://localhost:5000/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
     if (!response.ok) {
@@ -97,7 +100,7 @@ function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <small>Must be at least 8 characters</small>
+              <small>Must be at least 8 characters and include an uppercase, lowercase, number, and special character</small>
             </div>
             
             <button className="create-account-btn" onClick={handleRegister}>
@@ -270,6 +273,17 @@ const quiz = [
 
 function QuizPage() {
 
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await fetch('http://localhost:5000/api/logout', {
+      method: 'POST',
+      credentials: 'include'
+    });
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
   const handleSaveResults = async () => {
     const email = localStorage.getItem('userEmail');
     const results = getCategoryScores();  // Your function to get scores
@@ -278,7 +292,8 @@ function QuizPage() {
       const response = await fetch('http://localhost:5000/api/save_results', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, results }),
+        credentials: 'include',
+        body: JSON.stringify({ results }),
       });
   
       const data = await response.json();
@@ -325,6 +340,12 @@ function QuizPage() {
 
   return (
     <div className="quiz-container">
+      <button onClick={handleLogout} className="logout-btn">
+        Logout
+        </button>
+      <button onClick={() => navigate('/history')} className="history-btn">
+        View History
+        </button>
       <h1 className = "title">Eco-Friendly Habits Quiz</h1>
       <form onSubmit={handleSubmit}>
         {quiz.map((cat, catIdx) => (
@@ -377,6 +398,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/history" element={<HistoryPage />} />
       </Routes>
     </Router>
   );
