@@ -344,7 +344,7 @@ function QuizPage() {
         Logout
         </button>
       <button onClick={() => navigate('/history')} className="history-btn">
-        View History
+        Dashboard
         </button>
       <h1 className = "title">Eco-Friendly Habits Quiz</h1>
       <form onSubmit={handleSubmit}>

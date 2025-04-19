@@ -349,3 +349,87 @@ button[type="submit"]:hover {
   padding: 8px 0;
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
+
+.history-columns {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.history-column,
+.habit-column,
+.recommendation-column {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.history-container {
+  padding: 1rem;
+  background-color: #FEEAEA;
+}
+
+.history-column h2,
+.habit-column h2,
+.recommendation-column h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.history-entry {
+  margin-bottom: 1.5rem;
+}
+
+.history-entry h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.history-entry ul {
+  margin-left: 1rem;
+}
+
+.history-entry ul li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.habit-item,
+.recommendation-item {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.history-column {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.habit-column {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.recommendation-column {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-blue {
+  background-color: #5865F2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 10px 0;
+  width: 180px;
+  text-align: center;
+}
+
+.btn-blue:hover {
+  background-color: #4752c4;
+}
